@@ -1,160 +1,85 @@
-# 🧠 FactTrace_Hackathon_Pioneer
-**Multi-Agent Fact Faithfulness Evaluation**
 
-**Group Name:** Pioneer  
-**Main Script:** `facttrace_jury.py`
+# FactTrace Hackathon @ University of Cambridge
 
----
+### 🧠 The Agentic Consensus Challenge
 
-## Overview
-
-`facttrace_jury.py` implements a **jury of AI agents** that debates whether an external claim is a *faithful representation* of an internal fact, or whether the meaning has been **mutated** through exaggeration, omission, or misinterpretation.
-
-Instead of relying on a single model verdict, the system orchestrates **multiple specialized agents** with distinct reasoning styles, forces them to **disagree and confront each other**, and then aggregates their judgments into a transparent final decision.
-
-This project was built for the **FactTrace Hackathon @ University of Cambridge**, addressing the **Agentic Consensus Challenge**:
-
-> *“We don’t want a black box. We want to see agents disagree, argue, and negotiate.”*
+**Welcome.**
+Your mission is to build a jury of AI agents that debates the truth.
+We don't want a black box that just says "True" or "False." We want to see agents **disagree, argue, and negotiate** to reach a verdict.
 
 ---
 
-## Core Idea
+## 🚩 The Challenge: "Faithful or Mutated?"
 
-Each fact–claim pair is evaluated by a **jury**, not a single judge.
+You will be given pairs of statements:
 
-The system runs in **two rounds**:
-1. **Independent Judgments** – agents evaluate the claim in isolation.
-2. **Confrontation Round** – agents re-evaluate after seeing each other’s arguments.
+1. **Internal Fact:** A source truth (e.g., a specific statistic from a report).
+2. **External Claim:** A statement derived from that fact (e.g., a tweet, headline, or summary).
 
-A final verdict is reached using **majority consensus**, while preserving ambiguity when appropriate.
+**Your Question:**
+Is the external claim a faithful representation of the internal fact — or is it a mutation?
 
----
-
-## Agent Roles
-
-The jury consists of three intentionally distinct agents:
-
-### 🧮 Pedantic Fact-Checker
-- Focuses on **literal factual accuracy**
-- Checks exact numbers, wording, and logical equivalence
-- Does *not* excuse simplifications or framing choices
-
-### 🧭 Context Guardian
-- Focuses on **missing qualifiers and scope shifts**
-- Flags changes in population, timeframe, geography, or causality
-- Identifies what is omitted but materially important
-
-### 🧠 Common-Sense Judge
-- Represents an **average, reasonable reader**
-- Evaluates whether the claim would **mislead in practice**
-- Focuses on overall takeaway rather than technical precision
-
-Each agent produces a structured response containing:
-- A verdict: **Faithful**, **Mutated**, or **Unclear**
-- A confidence level
-- Bullet-pointed reasoning
+**The Catch:**
+The data is ambiguous by design. "Technically true" isn't enough. Your agents need to figure out if the *meaning* has shifted (e.g., through exaggeration, missing context, or causal confusion).
 
 ---
 
-## Decision Logic
+## ⚖️ What to Build
 
-After the confrontation round, the system determines a final verdict:
+A single AI can answer this. **A jury explains it.**
+Your primary goal is to design the **interaction** between agents.
 
-- **Mutated** → if at least **two agents** vote *Mutated*
-- **Faithful** → only if **all agents** vote *Faithful*
-- **Ambiguous** → all other cases
-
-This conservative logic avoids overconfident conclusions and treats uncertainty as a first-class outcome.
-
----
-
-## Data Flow
-
-1. Load a CSV file containing:
-   - `truth` → internal fact
-   - `claim` → external claim
-2. Select a **strategic subset** of cases (default: 5)
-3. For each case:
-   - Display the internal fact and external claim
-   - Run Round 1 (independent judgments)
-   - Run Round 2 (agent confrontation)
-   - Output a final verdict with agent votes
-
-All agent debates and decisions are printed live for **maximum demo transparency**.
+* **Create Roles:** Don't just clone the same agent. Build a "Sceptic," a "Pedantic Fact-Checker," or a "Common Sense Judge."
+* **Let Them Fight:** What happens when they disagree? Do they vote? Do they compromise?
+* **The Verdict:** Your system must output a final decision and a transparent reason why.
 
 ---
 
-## Configuration
+## 📁 The Data
 
-Key parameters in `facttrace_jury.py`:
-
-```python
-MODEL = "gpt-5.2"        # switch to cheaper models during development
-CSV_PATH = "Pioneer.csv"
-N_CASES = 5
-INTERNAL_COL = "truth"
-EXTERNAL_COL = "claim"
-```
-
-## Implementation Notes
-
-The script uses:
-
-- **python-dotenv** for API key management  
-- **OpenAI Chat Completions API** for agent reasoning  
-- **Low temperature (0.3)** for consistent, reasoned outputs  
+* **Your Team, Your Data.** You will find a dataset file that matches your team name.
+* **Pick your battles.** You do not need to process the whole file. **Decide on a subset size** that works for you (we recommend **5 pairs**).
+* **Focus.** Choose the cases that are interesting and likely to spark a good argument between your agents.
 
 ---
 
-## Why a Multi-Agent Jury?
+## 🔑 API Keys & Credits
 
-A single prompt can label a claim as *“true”* or *“false.”*  
-A **jury explains why**.
+We are making this easy for you:
 
-This approach:
+1. **You get a key.** We will hand each team a pre-loaded API key at the start.
+2. **It has a limit.** The credit is generous but finite.
+3. **Don't burn it.**
+* **Development:** Use cheap models (e.g., `gpt-4o-mini`) while testing your loops.
+* **The Demo:** Switch to the flagship models (e.g., `gpt-4o`) only for your final presentation.
 
-- Exposes different failure modes of factual mutation  
-- Forces agents to confront alternative interpretations  
-- Prevents brittle binary classifications  
-- Preserves ambiguity when the data genuinely supports it  
 
-The result is a **transparent, debatable, and explainable verdict**.
 
 ---
 
-## Example Output
+## 🏁 The 5-Minute Pitch
 
-```text
-CASE 12
+At the end, you have **5 minutes** to show us what you built.
+**Keep it simple:**
 
-[Pedantic Fact-Checker]
-Verdict: Faithful
-Confidence: High
-Key Arguments:
-- Numerical values match exactly
+1. **Show the Debate:** We want to see the agents arguing in your terminal or notebook.
+2. **Show the Verdict:** Did they agree? Why?
+3. **The "Why":** Explain why your multi-agent approach is better than a single prompt.
 
-[Context Guardian]
-Verdict: Mutated
-Confidence: Medium
-Key Arguments:
-- Timeframe omitted
-- Causal interpretation implied
-
-[Common-Sense Judge]
-Verdict: Mutated
-Confidence: High
-Key Arguments:
-- Likely to mislead an average reader
-
-FINAL VERDICT:
-Decision: Mutated
-Agent votes: ['Mutated', 'Mutated', 'Mutated']
-
-```
 ---
-## Intended Use
 
-- Studying factual mutation and narrative drift  
-- Transparent AI-assisted fact-checking  
-- Research into agentic consensus and deliberative AI systems
----
+### 🏆 Judging Criteria
+
+**1. Agent Design (30%) 🧠**
+Do your agents have distinct roles that actually debate? We look for meaningful interaction—not just a chain of prompts—and evidence that the team beats a single AI.
+
+**2. Reasoning & Explanation (30%) 🧾**
+Does the system explain *why* it reached a verdict? We value honest handling of uncertainty and clear insights into why a case is ambiguous.
+
+**3. Data Understanding (20%) 🔍**
+Did you choose a strategic subset? We look for thoughtful selection that highlights interesting mutations rather than just processing random rows.
+
+**4. Demo Clarity (20%) 🎤**
+Can you explain your solution in 5 minutes? A great demo is structured, easy to follow, and teaches the judges something new.
+
+**Good luck. Start building.**

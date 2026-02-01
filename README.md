@@ -12,9 +12,7 @@
 
 Instead of relying on a single model verdict, the system orchestrates **multiple specialized agents** with distinct reasoning styles, forces them to **disagree and confront each other**, and then aggregates their judgments into a transparent final decision.
 
-This project was built for the **FactTrace Hackathon @ University of Cambridge**, addressing the **Agentic Consensus Challenge**:
-
-> *“We don’t want a black box. We want to see agents disagree, argue, and negotiate.”*
+This project was built for the **FactTrace Hackathon @ University of Cambridge**, addressing the **Agentic Consensus Challenge**
 
 ---
 
@@ -158,3 +156,4 @@ Agent votes: ['Mutated', 'Mutated', 'Mutated']
 - Transparent AI-assisted fact-checking  
 - Research into agentic consensus and deliberative AI systems
 ---
+
